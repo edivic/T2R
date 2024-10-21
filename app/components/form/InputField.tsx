@@ -1,46 +1,29 @@
-import { ReactNode } from "react";
-import * as React from "react";
-
-import { useFormContext } from "react-hook-form";
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/Form";
+import { Label } from "~/components/ui/Label";
 import { Input } from "~/components/ui/Input";
+import * as React from "react";
+import { useFormErrors } from "~/components/form/CustomForm";
+import { FieldDescription, FieldError } from "~/components/form/Field";
 
-type InputFieldProps = {
+interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  label?: ReactNode;
+  label?: string;
   description?: string;
-  readonly?: boolean;
-} & React.InputHTMLAttributes<HTMLInputElement>;
+}
 
 export default function InputField({
-  name,
   label,
   description,
+  name,
   ...rest
 }: InputFieldProps) {
-  const { control } = useFormContext();
+  const { errors } = useFormErrors();
 
   return (
-    <FormField
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormItem>
-          {label && <FormLabel>{label}</FormLabel>}
-          <FormControl>
-            <Input id={name} {...field} {...rest} />
-          </FormControl>
-          {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <>
+      {label && <Label>{label}</Label>}
+      <Input name={name} {...rest} />
+      <FieldError>{errors?.[name]}</FieldError>
+      <FieldDescription>{description}</FieldDescription>
+    </>
   );
 }

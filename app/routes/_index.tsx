@@ -1,48 +1,31 @@
-import type { MetaFunction } from "@remix-run/node";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/Card";
-import { Input } from "~/components/ui/Input";
-import { Button } from "~/components/ui/Button";
-import { Label } from "~/components/ui/Label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/Tabs";
+import SignInForm from "~/pages/login/SignInForm";
+import SignUpForm from "~/pages/login/SignUpForm";
+import { ActionFunction } from "@remix-run/node";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
+export const action: ActionFunction = async ({ request }) => {
+  return {
+    errors: {
+      username: "Required",
+    },
+  };
 };
 
 export default function Index() {
   return (
     <div className="flex h-screen items-center justify-center">
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Create project</CardTitle>
-          <CardDescription>
-            Deploy your new project in one-click.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Name of your project" />
-              </div>
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
-        </CardFooter>
-      </Card>
+      <Tabs defaultValue="signin" className="w-[400px]">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="signin">Sign in</TabsTrigger>
+          <TabsTrigger value="signup">Sign up</TabsTrigger>
+        </TabsList>
+        <TabsContent value="signin">
+          <SignInForm />
+        </TabsContent>
+        <TabsContent value="signup">
+          <SignUpForm />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
